@@ -18,8 +18,8 @@ label {
 }
 
 .picpok {
-    width:  150px;
-    height: 150px;
+    width:  144px;
+    height: 144px;
     object-fit: cover;
 }
 
@@ -184,5 +184,66 @@ a:link {
 
     #shinies {
         grid-template-columns: 1fr;
+    }
+}
+
+/*ALT GALLERY*/
+.toggle-input input {
+    width: auto;
+}
+.toggle-input label {
+    font-size: 22px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.stats:not(.gallery) .showstats,
+.stats.gallery .showsprites {
+    display: block;
+}
+.stats.gallery .showstats,
+.stats:not(.gallery) .showsprites {
+    display: none;
+}
+.stats.gallery .picpok {
+    width: 288px;
+    height: 288px;
+    max-width: 100%;
+}
+.showsprites {
+    margin: 0 3px;
+}
+.spritegallery {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    border: 1px solid #FFF;
+    border-radius: 3px;
+    margin: 0 auto;
+    padding: 3px;
+    max-width: 520px;
+    min-height: 108px;
+}
+.spritegallery img {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    margin: 2px;
+    cursor: pointer;
+}
+
+/* ALT GALLERY TABLETS */
+@media only screen and (max-width: 768px) {
+    .stats.gallery .picpok {
+        width: 192px;
+        height: 192px;
+    }
+}
+
+/* ALT GALLERY MOBILE */
+@media only screen and (max-width: 480px) {
+    .stats.gallery .picpok {
+        width: 144px;
+        height: 144px;
     }
 }

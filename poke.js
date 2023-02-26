@@ -109,6 +109,8 @@ function resetPoke() {
         document.getElementById(L0[i]).style.color = "";
         document.getElementById(L1[i]).style.color = "";
     }
+
+    cleanGallery();
 }
 
 
@@ -698,6 +700,9 @@ function fuseBothPoke(){
 
     document.getElementById("ab2").innerHTML = abilitiesText2;
     document.getElementById("hab2").innerHTML = hiddenAbilitiesText2;
+
+    //Gallery
+    createGallery();
 
     //Fusion done
     buttons = document.getElementsByClassName("button");
@@ -1292,4 +1297,80 @@ function fusType(mon1, mon2) {
 
 function isMissingNames(mon1, mon2){
     return (mon1 == "" || mon1.length == 0 || mon1 == null) || (mon2 == "" || mon2.length == 0 || mon2 == null)
+}
+
+
+//--ALT GALLERY--//
+let altList = {};
+
+//Call alt json
+$.getJSON('altList.json', function(data) {
+    altList = data;
+}).fail(function() {
+    //if error, hide toggle buttons
+    console.error( "Error loading altList.json. Sprite galleries won't be shown." );
+    document.getElementById("show_content_toggle").style.display = "none";
+});
+
+//Change the type of content we are seeing in the calculator
+function showContent() {
+    var content = $('input[name="showContent"]:checked').val();
+    $("#stats")[content=="sprites" ? "addClass" : "removeClass"]('gallery');
+}
+
+//Edit the galery according to the current values
+function createGallery() {
+    let fusionsIds = {
+        1: num1 + "." + num2,
+        2: num2 + "." + num1
+    }
+
+    //Make this function twice
+    for(let i=1; i<=2; i++) {
+        let fusionGallery = document.getElementById("spritegallery" + i); //Gallery
+        fusionGallery.innerHTML = ""; //Cleaning previous gallery
+
+        let fusionId = fusionsIds[i]; //The fusion of this loop
+        if(typeof altList[fusionId] != "undefined") {
+            let pic = document.getElementById("pic" + i); //Fusion main image element
+            let fusionAlts = []; //Making list of alt URLs
+                fusionAlts.push({ //We save the main image here
+                    src: pic.src,
+                    title: pic.title, 
+                }); 
+                
+            //Generating alt URLs
+            for(var altId=0; altId<altList[fusionId].length; altId++) {
+                var imgName = fusionId + altList[fusionId][altId] + ".png";
+                fusionAlts.push({
+                    src: "CustomBattlersVisible/" + imgName,
+                    title: imgName, 
+                }); 
+            }
+
+            //Insert alts
+            for(let altId=0; altId<fusionAlts.length; altId++) {
+                let fusionAlt = fusionAlts[altId];
+                let img = document.createElement("img");
+                    img.src = fusionAlt.src;
+                    img.title = fusionAlt.title;
+                    img.loading = "lazy";
+                    img.onclick = function() { //Changes main image element to see it bigger
+                        pic.src = fusionAlt.src;
+                        pic.title = fusionAlt.title;
+                    }
+                fusionGallery.appendChild(img);
+            }
+        } else {
+            fusionGallery.innerHTML = "<i>This fusion doesn't have alternative sprites.</i>";
+        }
+    }
+
+}
+
+//Clean gallery if resets
+function cleanGallery() {
+    for(let i=1; i<=2; i++) {
+        document.getElementById("spritegallery" + i).innerHTML = "";
+    }
 }
